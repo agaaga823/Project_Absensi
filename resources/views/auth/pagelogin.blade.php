@@ -40,7 +40,7 @@
 
     .left-panel h4 {
       font-weight: 700;
-      color: #ffc107;
+      color: #F6AF45;
     }
 
     .left-panel h1 {
@@ -76,6 +76,7 @@
     .btn-warning {
       width: 100%;
       font-weight: 600;
+      background-color: #F6AF45;
     }
 
     .form-check-label {
