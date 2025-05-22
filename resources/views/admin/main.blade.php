@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
     <style>
         html, body {
             height: 100%;
@@ -60,7 +63,7 @@
         <!-- Sidebar -->
         <div class="col-md-3 col-lg-2 p-3 sidebar">
             <h5 class="fw-bold mb-4">ngabsen <span style="color: #fbb03b;">in</span></h5>
-            
+
             <a href="{{ route('admin.dashboard') }}" class="d-block p-2 rounded mb-2 {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                 <i class="bi bi-house-door-fill me-2"></i> Beranda
             </a>
@@ -80,10 +83,22 @@
         </div>
 
         <!-- Main content -->
-        <div class="col-md-9 col-lg-10 p-4">
-            <div class="d-flex justify-content-end mb-3">
-                <span class="me-2">Agnes</span>
-                <i class="bi bi-person"></i>
+         <div class="col-md-9 col-lg-10 p-4">
+            <div class="d-flex justify-content-end mb-3 align-items-center position-relative">
+                <span class="me-2">{{ Auth::user()->nama ?? 'Admin' }}</span>
+                <div class="dropdown">
+                    <a href="#" class="text-dark" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person" style="font-size: 1.5rem; cursor: pointer;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="dropdown-item">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             {{-- Konten Halaman --}}

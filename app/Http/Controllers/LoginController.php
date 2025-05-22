@@ -16,10 +16,23 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember');
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
-            return redirect()->intended('/dashboard');
+
+            // Cek role user
+            $user = Auth::user();
+            if ($user->role === 'admin') {
+                return redirect()->intended('/admin/dashboard');
+            } elseif ($user->role === 'user') {
+                return redirect()->intended('/dashboard');
+            } else {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Role tidak dikenali.',
+                ])->onlyInput('email');
+            }
         }
 
         return back()->withErrors([
