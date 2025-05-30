@@ -14,7 +14,7 @@ class PresensiController extends Controller
     {
         // Ambil data presensi untuk user yang login, urutkan berdasarkan tanggal terbaru
         $presensis = Presensi::with('user') // Eager load relasi user
-                            ->where('user_id', Auth::id())
+                            ->where('id', Auth::id())
                             ->orderBy('tanggal_presensi', 'desc')
                             ->orderBy('jam_masuk', 'desc')
                             ->get();
