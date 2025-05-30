@@ -2,11 +2,12 @@
 
 @section('content')
 <div class="container-fluid px-4">
-    <h4 class="fw-bold mb-4">Tambah Pengguna</h4>
+    <h4 class="fw-bold mb-4">Edit Pengguna</h4>
 
     <div class="card p-4">
-        <form action="{{ route('admin.user.store') }}" method="POST">
+        <form action="{{ route('admin.user.update', $user->id) }}" method="POST">
             @csrf
+            @method('PUT')
 
             <div class="mb-3">
                 <label for="nama" class="form-label fw-semibold">Nama</label>
@@ -15,7 +16,7 @@
                     id="nama" 
                     name="nama" 
                     class="form-control @error('nama') is-invalid @enderror" 
-                    value="{{ old('nama') }}" 
+                    value="{{ old('nama', $user->nama) }}" 
                     required
                 >
                 @error('nama')
@@ -30,7 +31,7 @@
                     id="email" 
                     name="email" 
                     class="form-control @error('email') is-invalid @enderror" 
-                    value="{{ old('email') }}" 
+                    value="{{ old('email', $user->email) }}" 
                     required
                 >
                 @error('email')
@@ -39,29 +40,14 @@
             </div>
 
             <div class="mb-3">
-                <label for="password" class="form-label fw-semibold">Password</label>
+                <label for="password" class="form-label fw-semibold">Password (Kosongkan jika tidak diubah)</label>
                 <input 
                     type="password" 
                     id="password" 
                     name="password" 
-                    class="form-control @error('password') is-invalid @enderror" 
-                    required
+                    class="form-control @error('password') is-invalid @enderror"
                 >
                 @error('password')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-3">
-                <label for="password_confirmation" class="form-label fw-semibold">Konfirmasi Password</label>
-                <input 
-                    type="password" 
-                    id="password_confirmation" 
-                    name="password_confirmation" 
-                    class="form-control @error('password_confirmation') is-invalid @enderror" 
-                    required
-                >
-                @error('password_confirmation')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
@@ -74,9 +60,8 @@
                     class="form-select @error('role') is-invalid @enderror" 
                     required
                 >
-                    <option value="" disabled selected>Pilih Posisi</option>
-                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                    <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User</option>
+                    <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
+                    <option value="user" {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>User</option>
                 </select>
                 @error('role')
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -84,7 +69,7 @@
             </div>
 
             <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-primary">Simpan</button>
+                <button type="submit" class="btn btn-primary">Update</button>
                 <a href="{{ route('admin.pengguna') }}" class="btn btn-secondary">Batal</a>
             </div>
         </form>

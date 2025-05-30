@@ -14,7 +14,7 @@
         <table class="table table-bordered rounded overflow-hidden" style="border-radius: 8px;">
             <thead style="background-color: #dbe8f7;">
                 <tr>
-                    <th>Nama</th>
+                    <th>Nama Kantor</th>
                     <th>Latitude</th>
                     <th>Longitude</th>
                     <th>Radius</th>
@@ -22,33 +22,37 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach ($kantors as $kantor)
                 <tr>
-                    <td>Kantor Utama</td>
-                    <td>-5.987654</td>
-                    <td>105.97374687436</td>
-                    <td>200</td>
+                    <td>{{ $kantor->nama }}</td>
+                    <td>{{ $kantor->latitude }}</td>
+                    <td>{{ $kantor->longitude }}</td>
+                    <td>{{ $kantor->radius }}</td>
                     <td>
                         <div class="d-flex gap-2">
                             <!-- Tombol Edit -->
-                            <button 
-                                class="btn btn-sm d-flex align-items-center justify-content-center" 
-                                style="background-color: #f0f0f0; width: 35px; height: 35px;" 
-                                title="Edit Lokasi"
-                            >
+                            <a href="{{ route('admin.office.edit', $kantor->id) }}" 
+                               class="btn btn-sm d-flex align-items-center justify-content-center" 
+                               style="background-color: #f0f0f0; width: 35px; height: 35px;" 
+                               title="Edit Lokasi">
                                 <i class="bi bi-pencil-fill text-dark"></i>
-                            </button>
+                            </a>
 
                             <!-- Tombol Hapus -->
-                            <button 
-                                class="btn btn-sm d-flex align-items-center justify-content-center" 
-                                style="background-color: #f0f0f0; width: 35px; height: 35px;" 
-                                title="Hapus Lokasi"
-                            >
-                                <i class="bi bi-trash-fill text-danger"></i>
-                            </button>
+                            <form action="{{ route('admin.office.destroy', $kantor->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus lokasi ini?');" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" 
+                                        class="btn btn-sm d-flex align-items-center justify-content-center" 
+                                        style="background-color: #f0f0f0; width: 35px; height: 35px;" 
+                                        title="Hapus Lokasi">
+                                    <i class="bi bi-trash-fill text-danger"></i>
+                                </button>
+                            </form>
                         </div>
                     </td>
                 </tr>
+                @endforeach
             </tbody>
         </table>
     </div>

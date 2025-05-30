@@ -7,44 +7,64 @@ use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\KantorController;
 use App\Http\Controllers\PenggunaController;
 
+// =========================
+// Route Awal (Login Page)
+// =========================
 Route::get('/', function () {
     return view('auth.pagelogin');
 })->name('login');
 
+// =========================
+// Auth: Login & Logout
+// =========================
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Route Dashboard User (hanya untuk user login)
+// =========================
+// Route untuk User Biasa
+// =========================
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/presensi', [PresensiController::class, 'index'])->name('presensi');
-    Route::get('/presensi/create', [PresensiController::class, 'create'])->name('presensi.create');
+
+    // Presensi
     Route::get('/presensi', [PresensiController::class, 'index'])->name('presensi.index');
+    Route::get('/presensi/create', [PresensiController::class, 'create'])->name('presensi.create');
+    Route::post('/presensi/store', [PresensiController::class, 'store'])->name('presensi.store');
 });
 
-// Route Admin (hanya untuk admin)
+// =========================
+// Route untuk Admin
+// =========================
 Route::middleware(['auth', 'is_admin'])->group(function () {
-    // Admin Dashboard
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
 
-    // Admin Presensi
+    // Dashboard admin
+    Route::get('/admin/dashboard', [DashboardController::class, 'adminDashboard'])->name('admin.dashboard');
+
+    // Presensi admin (jika hanya view statis)
     Route::get('/admin/presensi', function () {
         return view('admin.presensi');
     })->name('admin.presensi');
 
-    // Admin Kantor
-    Route::get('/admin/kantor', function () {
-        return view('admin.office.kantor');
-    })->name('admin.kantor');
-    Route::get('admin/office/create', [KantorController::class, 'create'])->name('admin.office.create');
-    Route::get('/admin/office', [KantorController::class, 'index'])->name('admin.office.index');
+    // ========== LOKASI KANTOR (CRUD) ==========
+    // Removed the direct view route to avoid undefined variable error
+    // Route::get('/admin/kantor', function () {
+    //     return view('admin.office.kantor'); // opsional, kalau form statis
+    // })->name('admin.kantor');
+    
+    Route::get('/admin/kantor', [KantorController::class, 'index'])->name('admin.kantor');
 
-    // Admin Pengguna
-    Route::get('/admin/pengguna', function () {
-        return view('admin.user.pengguna');
-    })->name('admin.pengguna');
-    Route::get('admin/user/create', [PenggunaController::class, 'create'])->name('admin.user.create');
+    Route::get('/admin/office/create', [KantorController::class, 'create'])->name('admin.office.create');
+    Route::post('/admin/office/store', [KantorController::class, 'store'])->name('admin.office.store');
+    Route::get('/admin/office/{id}/edit', [KantorController::class, 'edit'])->name('admin.office.edit');
+    Route::put('/admin/office/{id}', [KantorController::class, 'update'])->name('admin.office.update');
+    Route::delete('/admin/office/{id}', [KantorController::class, 'destroy'])->name('admin.office.destroy');
+
+    // ========== PENGGUNA / USER (CRUD) ==========
+    Route::get('/admin/pengguna', [PenggunaController::class, 'index'])->name('admin.pengguna');
+    Route::get('/admin/user/create', [PenggunaController::class, 'create'])->name('admin.user.create');
+    Route::post('/admin/user/store', [PenggunaController::class, 'store'])->name('admin.user.store');
+    Route::get('/admin/user/{id}/edit', [PenggunaController::class, 'edit'])->name('admin.user.edit');
+    Route::put('/admin/user/{id}/update', [PenggunaController::class, 'update'])->name('admin.user.update');
+    Route::delete('/admin/user/{id}', [PenggunaController::class, 'destroy'])->name('admin.user.destroy');
 });

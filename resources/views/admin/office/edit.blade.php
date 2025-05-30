@@ -2,67 +2,56 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="fw-bold mb-3">Lokasi Kantor</h5>
+    <h5 class="fw-bold mb-3">Edit Lokasi Kantor</h5>
 </div>
 
-<form method="POST" action="{{ route('admin.office.store') }}">
+<form action="{{ route('admin.office.update', $kantor->id) }}" method="POST">
     @csrf
+    @method('PUT')
+
     <div class="row">
         <!-- Form Utama -->
         <div class="col-md-8">
             <div class="card p-4 mb-3">
                 <div class="mb-3">
-                    <label for="nama" class="form-label fw-semibold">Nama Kantor</label>
-                    <select id="nama" name="nama" class="form-select text-white @error('nama') is-invalid @enderror" style="background-color: #142D70;" required>
-                        <option value="Kantor Utama" {{ old('nama', 'Kantor Utama') == 'Kantor Utama' ? 'selected' : '' }}>Kantor Utama</option>
-                        <option value="Kantor Cabang" {{ old('nama') == 'Kantor Cabang' ? 'selected' : '' }}>Kantor Cabang</option>
-                    </select>
-                    @error('nama')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                    <label class="form-label fw-semibold">Nama</label>
+                    <input type="text" name="nama" class="form-control text-white" style="background-color: #142D70;" value="{{ $kantor->nama }}" required />
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Lokasi (Klik pada Peta)</label>
                     <div id="map" style="height: 300px;" class="rounded mb-2"></div>
                 </div>
+
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="latitude" class="form-label fw-semibold">Latitude</label>
-                        <input type="text" id="latitude" name="latitude" class="form-control text-white @error('latitude') is-invalid @enderror" style="background-color: #142D70;" value="{{ old('latitude', '-5.898764') }}" required />
-                        @error('latitude')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <label class="form-label fw-semibold">Latitude</label>
+                        <input type="text" id="latitude" name="latitude" class="form-control text-white" style="background-color: #142D70;" value="{{ $kantor->latitude }}" required />
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="longitude" class="form-label fw-semibold">Longitude</label>
-                        <input type="text" id="longitude" name="longitude" class="form-control text-white @error('longitude') is-invalid @enderror" style="background-color: #142D70;" value="{{ old('longitude', '105.892765') }}" required />
-                        @error('longitude')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <label class="form-label fw-semibold">Longitude</label>
+                        <input type="text" id="longitude" name="longitude" class="form-control text-white" style="background-color: #142D70;" value="{{ $kantor->longitude }}" required />
                     </div>
                 </div>
             </div>
+
+            <div class="d-flex gap-2 mb-3">
+                <button type="submit" class="btn text-white" style="background-color: #fbb03b;">Simpan Perubahan</button>
+                 <a href="{{ route('admin.kantor') }}" class="btn btn-secondary">Batal</a>
+            </div>
         </div>
+
         <!-- Radius -->
         <div class="col-md-4">
             <div class="card p-3 mb-3">
-                <label for="radius" class="form-label fw-semibold">Radius (meter)</label>
-                <input type="text" id="radius" name="radius" class="form-control text-white @error('radius') is-invalid @enderror" style="background-color: #142D70;" value="{{ old('radius', '200') }}" required />
-                @error('radius')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+                <label class="form-label fw-semibold">Radius (meter)</label>
+                <input type="text" name="radius" class="form-control text-white" style="background-color: #142D70;" value="{{ $kantor->radius }}" required />
             </div>
         </div>
     </div>
-    <div class="d-flex gap-2 mb-3">
-        <button type="submit" class="btn text-white" style="background-color: #fbb03b;">Simpan</button>
-        <a href="{{ route('admin.kantor') }}" class="btn btn-secondary">Batal</a>
-    </div>
 </form>
 
-<!-- Leaflet CSS & JS sudah ada di main layout -->
-
+<!-- Leaflet Map Script -->
 <script>
     const latitudeInput = document.getElementById("latitude");
     const longitudeInput = document.getElementById("longitude");

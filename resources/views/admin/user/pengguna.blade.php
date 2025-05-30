@@ -4,14 +4,12 @@
 <div class="container-fluid px-4">
     <h4 class="fw-bold mb-4">Pengguna</h4>
 
-    <!-- Tombol Tambah -->
     <div class="d-flex justify-content-end mb-3">
-        <a href = "{{ route('admin.user.create') }}" class="btn btn-danger">Tambah Pengguna</a> {{-- Ganti href sesuai route --}}
+        <a href="{{ route('admin.user.create') }}" class="btn btn-danger">Tambah Pengguna</a>
     </div>
 
-    <!-- Tabel Pengguna -->
     <div class="table-responsive">
-        <table class="table table-bordered rounded overflow-hidden" style="border-radius: 8px;">
+        <table class="table table-bordered rounded overflow-hidden">
             <thead style="background-color: #dbe8f7;">
                 <tr>
                     <th>Nama</th>
@@ -21,63 +19,29 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach ($users as $user)
                 <tr>
-                    <td>Admin</td>
-                    <td>adm@gmail.com</td>
-                    <td>Admin</td>
+                    <td>{{ $user->nama }}</td>
+                    <td>{{ $user->email }}</td>
+                    <td>{{ ucfirst($user->role) }}</td>
                     <td>
                         <div class="d-flex gap-2">
-                            <!-- Tombol Edit -->
-                            <button 
-                                class="btn btn-sm d-flex align-items-center justify-content-center" 
-                                style="background-color: #f0f0f0; width: 35px; height: 35px;" 
-                                title="Edit Pengguna"
-                            >
+                            <a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-sm" style="background-color: #f0f0f0;">
                                 <i class="bi bi-pencil-fill text-dark"></i>
-                            </button>
-
-                            <!-- Tombol Hapus -->
-                            <button 
-                                class="btn btn-sm d-flex align-items-center justify-content-center" 
-                                style="background-color: #f0f0f0; width: 35px; height: 35px;" 
-                                title="Hapus Pengguna"
-                            >
-                                <i class="bi bi-trash-fill text-danger"></i>
-                            </button>
+                            </a>
+                            <form action="{{ route('admin.user.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-sm" style="background-color: #f0f0f0;">
+                                    <i class="bi bi-trash-fill text-danger"></i>
+                                </button>
+                            </form>
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td>Agnes</td>
-                    <td>agnes12@gmail.com</td>
-                    <td>Karyawan</td>
-                    <td>
-                        <div class="d-flex gap-2">
-                            <!-- Tombol Edit -->
-                            <button 
-                                class="btn btn-sm d-flex align-items-center justify-content-center" 
-                                style="background-color: #f0f0f0; width: 35px; height: 35px;" 
-                                title="Edit Pengguna"
-                            >
-                                <i class="bi bi-pencil-fill text-dark"></i>
-                            </button>
-
-                            <!-- Tombol Hapus -->
-                            <button 
-                                class="btn btn-sm d-flex align-items-center justify-content-center" 
-                                style="background-color: #f0f0f0; width: 35px; height: 35px;" 
-                                title="Hapus Pengguna"
-                            >
-                                <i class="bi bi-trash-fill text-danger"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+                @endforeach
             </tbody>
         </table>
     </div>
 </div>
-
-<!-- Bootstrap Icons -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 @endsection

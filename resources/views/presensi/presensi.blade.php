@@ -19,13 +19,25 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>2025-04-20</td>
-                <td>Agnes</td>
-                <td>08:50:25</td>
-                <td>17:20:11</td>
-                <td class="text-success fw-bold">Hadir</td>
-            </tr>
+            @forelse ($presensis as $presensi)
+                <tr>
+                    <td>{{ \Carbon\Carbon::parse($presensi->tanggal_presensi)->translatedFormat('d F Y') }}</td>
+                    <td>{{ $presensi->user->nama ?? 'N/A' }}</td>
+                    <td>{{ $presensi->jam_masuk }}</td>
+                    <td>{{ $presensi->jam_keluar ?? '- - : - - : - -' }}</td>
+                    <td class="{{ ($presensi->jam_masuk && $presensi->jam_keluar) ? 'text-success' : 'text-warning' }} fw-bold">
+                        @if ($presensi->jam_masuk && $presensi->jam_keluar)
+                            Hadir
+                        @else
+                            Belum Lengkap
+                        @endif
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="5" class="text-center">Belum ada data presensi.</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 </div>

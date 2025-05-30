@@ -7,7 +7,7 @@
     <div class="col-md-6">
         <div class="card card-info p-3">
             <p class="text-muted mb-1">Total Pengguna</p>
-            <h5 class="fw-bold">25</h5>
+            <h5 class="fw-bold">{{ $totalUsers }}</h5>
         </div>
     </div>
 </div>

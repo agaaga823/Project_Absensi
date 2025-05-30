@@ -11,26 +11,24 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('karyawan', function (Blueprint $table) {
+        Schema::create('kantor', function (Blueprint $table) {
             $table->id();
-            $table->string('nama', 255);
-            $table->string('email');
-            $table->string('password');
-            $table->rememberToken();
-            $table->string('no_telp', 13);
+            $table->string('nama');
+            $table->decimal('latitude', 10, 7);
+            $table->decimal('longitude', 10, 7);
+            $table->integer('radius'); // radius dalam meter
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        //
+        Schema::dropIfExists('kantor');
     }
 };
+

@@ -15,11 +15,12 @@ return new class extends Migration
     {
         Schema::create('presensi', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('karyawan_id')->constrained('karyawan')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Relasi ke tabel users
             $table->date('tanggal_presensi');
             $table->time('jam_masuk');
-            $table->time('jam_keluar');
-            $table->text('lokasi');
+            $table->time('jam_keluar')->nullable(); // Jam keluar bisa jadi null jika baru absen masuk
+            $table->text('lokasi_masuk')->nullable(); // Format JSON: {"latitude": xxx, "longitude": xxx}
+            $table->text('lokasi_keluar')->nullable(); // Format JSON: {"latitude": xxx, "longitude": xxx}
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('presensi');
     }
 };
